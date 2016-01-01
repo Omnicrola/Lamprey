@@ -11,30 +11,24 @@ var Stream = require('./Stream');
 window.Lamprey = {
     start: function (config) {
         var leafMap = LeafletWrapper.loadMap(config);
-        var gameState = new GameState();
-        var playButton = document.getElementById(config.playButtonId);
-        playButton.onClick = function () {
-            gameState.cycleOnce();
-        };
+        //var gameState = new GameState();
+        //var playButton = document.getElementById(config.playButtonId);
+        //playButton.onClick = function () {
+        //    gameState.cycleOnce();
+        //};
 
-        StreamDataRetriever.getData(function (data) {
-            window.foo = data;
-        });
+        StreamDataRetriever.getData(function (streams) {
+            streams.forEach(function (stream) {
+                leafMap.addMarker({
+                    location: stream.getHeadLocation(),
+                    popup: {
+                        message: stream.title,
+                        onOpen: stream.show.bind(stream),
+                        onClose: stream.hide.bind(stream)
+                    }
+                });
+            });
+        }, leafMap);
 
-        var points = [
-            new Point(42.945279400000061, -85.852150510999991),
-            new Point(43.001563933000057, -85.893484576999981)
-        ];
-        var title = "<b>Grand River</b><br>250 miles<br>73% infestation";
-        var myStream = new Stream(title, points);
-
-        var marker = leafMap.addMarker({
-            location: [43.058363, -86.250297],
-            popup: {
-                message: myStream.title,
-                onOpen: myStream.show.bind(myStream),
-                onClose: myStream.hide.bind(myStream)
-            }
-        });
     }
 };

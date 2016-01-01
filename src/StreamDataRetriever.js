@@ -6,7 +6,7 @@ var Stream = require('./Stream');
 var Point = require('./Point');
 
 module.exports = {
-    getData: function (consumer) {
+    getData: function (consumer, mapWrapper) {
         console.log('requesting...');
         var xmlHttpRequest = new XMLHttpRequest();
         xmlHttpRequest.open('GET', 'JeffsQuandry.json');
@@ -14,39 +14,54 @@ module.exports = {
         xmlHttpRequest.onreadystatechange = function () {
             if (xmlHttpRequest.readyState === XMLHttpRequest.DONE &&
                 xmlHttpRequest.status === 200) {
-                var processedData = processData(JSON.parse(xmlHttpRequest.responseText));
+                var rawData = JSON.parse(xmlHttpRequest.responseText);
+                var processedData = processData(rawData, mapWrapper);
                 consumer(processedData);
             }
         };
-        xmlHttpRequest.send(null);
+        xmlHttpRequest.send();
     }
 };
 
-function processData(rawData) {
+function processData(rawData, mapWrapper) {
     console.log('features: ' + rawData.features.length);
     var streams = rawData.features.map(function (feature) {
-        return parseFeature(feature);
+        return parseFeature(feature, mapWrapper);
     });
     return streams;
 }
 
-function parseFeature(feature) {
+function parseFeature(feature, mapWrapper) {
     var name = feature.attributes.Name;
     var shapeLength = feature.attributes.Shape_Length;
     console.log('paths: ' + feature.geometry.paths.length);
-    var paths = parsePaths(feature.geometry.paths);
-    return new Stream(name, shapeLength, paths);
-}
-
-function parsePaths(pathData) {
-    return pathData.map(function (path) {
-        console.log('points: ' + path.length);
-        return parsePath(path);
+    var paths = parsePaths(feature.geometry.paths, mapWrapper);
+    var headLocation = feature.geometry.paths[0][0].reverse();
+    return new Stream({
+        name: name,
+        shapeLength: length,
+        headLocation: headLocation,
+        paths: paths
     });
 }
 
-function parsePath(path) {
-    return path.map(function (coordinates) {
-        return new Point(coordinates[0], coordinates[1]);
+function parsePaths(allPaths, mapWrapper) {
+    var allPaths = allPaths.map(function (reversedPoints) {
+        var points = flipPoints(reversedPoints);
+        var line = mapWrapper.createLine(points, {
+            color: 'red',
+            weight: 3,
+            opacity: 0.5,
+            smoothFactor: 1
+        });
+        return line;
+    });
+    console.log('> parsed paths: ' + allPaths.length);
+    return allPaths;
+}
+
+function flipPoints(points) {
+    return points.map(function (point) {
+        return [point[1], point[0]];
     });
 }
