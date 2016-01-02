@@ -3,16 +3,12 @@
  */
 var gulp = require('gulp');
 var browserify = require('gulp-browserify');
-var sourceStream = require('vinyl-source-stream');
+var watch = require('gulp-watch');
 var clean = require('gulp-clean');
 
-gulp.task('default', ['build']);
+gulp.task('default', ['watch']);
 
-gulp.task('build', function (done) {
-
-});
-
-gulp.task('build', ['clean', 'make-js']);
+gulp.task('build', ['clean', 'make-js', 'watch']);
 
 gulp.task('clean', function () {
     gulp.src('./dist/js', {read: false})
@@ -21,6 +17,16 @@ gulp.task('clean', function () {
 
 gulp.task('make-js', function () {
     gulp.src('src/Lamprey.js')
+        .pipe(browserify({
+            insertGlobals: true,
+            debug: true
+        }))
+        .pipe(gulp.dest('./dist/js'));
+});
+
+gulp.task('watch', function () {
+    return gulp.src('src/Lamprey.js')
+        .pipe(watch('src/**/*.js'))
         .pipe(browserify({
             insertGlobals: true,
             debug: true

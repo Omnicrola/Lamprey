@@ -7,14 +7,17 @@
  <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
 
  */
+
+var Config = require('./Config');
+
 var Leaflet = {
     loadMap: function (config) {
         var leafletMap = L.map(config.mapElementId).setView(config.defaultViewCoordinates, config.defaultZoom);
-        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+        L.tileLayer(Config.leaflet.apiUrl(), {
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
             maxZoom: 18,
-            id: 'jeffglc.of7g059c',
-            accessToken: 'pk.eyJ1IjoiamVmZmdsYyIsImEiOiJjaWlic2V2ZWgwMWtkd2VsemxnNjU0amplIn0.4_KiKQDyeSB5BroosNCdAA'
+            id: Config.leaflet.apiId(),
+            accessToken: Config.leaflet.apiKey()
         }).addTo(leafletMap);
 
         var wrapper = {};
