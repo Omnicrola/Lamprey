@@ -14,13 +14,13 @@ window.Lamprey = {
         var leafMap = LeafletWrapper.loadMap(config);
         var gameState = new GameState();
 
-        StreamDataRetriever.getData(function (streams) {
+        StreamDataRetriever.getAllStreams(function (streams) {
             streams.forEach(function (stream) {
                 gameState.addStream(stream);
                 leafMap.addMarker(MapMarker.create(stream));
             });
             MapMarker.watchForEvents(config.mapElementId, gameState);
-        }, leafMap);
+        });
 
         leafMap.addButton({
             name: 'Play',

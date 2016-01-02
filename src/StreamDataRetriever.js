@@ -4,8 +4,28 @@
 
 var Stream = require('./Stream');
 var Point = require('./Point');
+var Ajax = require('./Ajax');
 
 module.exports = {
+    getAllStreams: function (consumer) {
+        Ajax
+            .get('http://10.0.0.45/ajax/getStreams.php?')
+            .success(function (data) {
+                consumer(data.map(function (dataElement) {
+                    return new Stream({
+                        name: dataElement.name,
+                        id: dataElement.id,
+                        streamLength: dataElement.length,
+                        infestationDensity: Math.random() * 100,
+                        headLocation: [dataElement.mouth_lat, dataElement.mouth_long],
+                        paths: null
+                    });
+                }));
+
+            })
+            .json()
+            .send();
+    },
     getData: function (consumer, mapWrapper) {
         console.log('requesting...');
         var xmlHttpRequest = new XMLHttpRequest();
