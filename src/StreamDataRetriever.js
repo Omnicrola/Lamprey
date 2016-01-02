@@ -34,23 +34,25 @@ function processData(rawData, mapWrapper) {
 function parseFeature(feature, mapWrapper) {
     var name = feature.attributes.Name;
     var id = feature.attributes.OBJECTID;
-    var shapeLength = feature.attributes.Shape_Length;
+    var length = feature.attributes.Shape_Length;
+    var infestationDensity = Math.random() * 100;
     console.log('paths: ' + feature.geometry.paths.length);
     var paths = parsePaths(feature.geometry.paths, mapWrapper);
     var headLocation = feature.geometry.paths[0][0].reverse();
     return new Stream({
         name: name,
         id: id,
-        shapeLength: length,
+        streamLength: length,
+        infestationDensity: infestationDensity,
         headLocation: headLocation,
         paths: paths
     });
 }
 
 function parsePaths(allPaths, mapWrapper) {
-    var allPaths = allPaths.map(function (reversedPoints) {
-        var points = flipPoints(reversedPoints);
-        var line = mapWrapper.createLine(points, {
+    var allPaths = allPaths.map(function (points) {
+        var reversedPoints = flipPoints(points);
+        var line = mapWrapper.createLine(reversedPoints, {
             color: 'red',
             weight: 3,
             opacity: 0.5,

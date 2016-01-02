@@ -2,8 +2,8 @@
  * Created by Eric on 1/1/2016.
  */
 var Stream = function (config) {
-    this.length = 100;
-    this.infestationDensity = 100;
+    this.streamLength = config.streamLength;
+    this.infestationDensity = config.infestationDensity;
     this.treatmentCostMultiplier = 1.0;
     this._paths = config.paths;
     this._headLocation = config.headLocation;
@@ -13,7 +13,7 @@ var Stream = function (config) {
 };
 
 Stream.prototype.getTreatmentCost = function (costPerUnit) {
-    return this.length * costPerUnit * this.treatmentCostMultiplier;
+    return this.streamLength * costPerUnit * this.treatmentCostMultiplier;
 };
 
 Stream.prototype.applyTreatment = function () {
