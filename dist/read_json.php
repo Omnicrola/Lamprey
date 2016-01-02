@@ -1,4 +1,5 @@
 <?php
+	ini_set('memory_limit','1000M');
 	require 'db.php';
 	require "predis/autoload.php";
 
@@ -11,7 +12,8 @@
 
 	$client = new Predis\Client($my_server);
 
-	$JSON = file_get_contents('JeffsQuandry.json');
+//	$JSON = file_get_contents('JeffsQuandry.json');
+	$JSON = file_get_contents('AllExtentMerge.json');
 	$JSON = json_decode($JSON,true);
 
 
@@ -20,13 +22,19 @@
 	
 
 	foreach ($JSON['features'] as $value) {
+
+
+		$length = rand(100,1000);
+		$lat = $value['geometry']['paths'][0][0][1];
+		$long = $value['geometry']['paths'][0][0][0];
+
 		$sql = "INSERT INTO stream VALUES ('"
 		     . $value['attributes']['OBJECTID'] . "','"
 		     . $value['attributes']['Lake_Num'] . "','"
 		     . $value['attributes']['Name'] . "','"
-		     . "" . "','"
-		     . "" . "','"
-		     . "" . "')";
+		     . "$length" . "','"
+		     . "$lat" . "','"
+		     . "$long" . "')";
 
 		mysql_query($sql);
 
