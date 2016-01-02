@@ -33,12 +33,14 @@ function processData(rawData, mapWrapper) {
 
 function parseFeature(feature, mapWrapper) {
     var name = feature.attributes.Name;
+    var id = feature.attributes.OBJECTID;
     var shapeLength = feature.attributes.Shape_Length;
     console.log('paths: ' + feature.geometry.paths.length);
     var paths = parsePaths(feature.geometry.paths, mapWrapper);
     var headLocation = feature.geometry.paths[0][0].reverse();
     return new Stream({
         name: name,
+        id: id,
         shapeLength: length,
         headLocation: headLocation,
         paths: paths

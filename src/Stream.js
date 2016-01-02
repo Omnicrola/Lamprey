@@ -8,10 +8,17 @@ var Stream = function (config) {
     this._paths = config.paths;
     this._headLocation = config.headLocation;
     this.title = config.name;
+    this.id = config.id;
+    this.isSelectedForTreatment = false;
+};
+
+Stream.prototype.getTreatmentCost = function (costPerUnit) {
+    return this.length * costPerUnit * this.treatmentCostMultiplier;
 };
 
 Stream.prototype.applyTreatment = function () {
     this.infestationDensity = Math.random() * 100;
+    this.isSelectedForTreatment = false;
 };
 
 Stream.prototype.getHeadLocation = function () {

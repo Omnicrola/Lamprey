@@ -4,6 +4,7 @@
 
 var GameState = require('./GameState');
 var LeafletWrapper = require('./LeafletWrapper');
+var MapMarker = require('./MapMarker');
 var StreamDataRetriever = require('./StreamDataRetriever');
 var Point = require('./Point');
 var Stream = require('./Stream');
@@ -11,24 +12,23 @@ var Stream = require('./Stream');
 window.Lamprey = {
     start: function (config) {
         var leafMap = LeafletWrapper.loadMap(config);
-        //var gameState = new GameState();
-        //var playButton = document.getElementById(config.playButtonId);
-        //playButton.onClick = function () {
-        //    gameState.cycleOnce();
-        //};
+        var gameState = new GameState();
 
         StreamDataRetriever.getData(function (streams) {
             streams.forEach(function (stream) {
-                leafMap.addMarker({
-                    location: stream.getHeadLocation(),
-                    popup: {
-                        message: stream.title,
-                        onOpen: stream.show.bind(stream),
-                        onClose: stream.hide.bind(stream)
-                    }
-                });
+                gameState.addStream(stream);
+                leafMap.addMarker(MapMarker.create(stream));
             });
+            MapMarker.watchForEvents(config.mapElementId, gameState);
         }, leafMap);
+
+        leafMap.addButton({
+            name: 'Play',
+            displayTitle: 'Play',
+            action: function (map) {
+                gameState.cycleOnce();
+            }
+        });
 
     }
 };

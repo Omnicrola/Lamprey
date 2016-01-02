@@ -14,28 +14,19 @@
 
         #map {
             height: 100%;
-            width: 60%;
+            width: 100%;
             display: inline-block;
         }
 
-        #game-panel {
-            width: 40%;
-            border-left: 2px solid black;
-            display: inline-block;
-        }
     </style>
     <script type="text/javascript">
     </script>
 </head>
 <body>
 <div id="map"></div>
-<div id="game-panel">
-    <button id="play">Go</button>
-</div>
 <script>
     Lamprey.start({
         mapElementId: 'map',
-        playButtonId : 'play',
         defaultViewCoordinates: [45.147590, -84.702824],
         defaultZoom: 7
     });

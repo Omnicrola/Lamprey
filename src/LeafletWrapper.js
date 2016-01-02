@@ -17,7 +17,6 @@ var Leaflet = {
             accessToken: 'pk.eyJ1IjoiamVmZmdsYyIsImEiOiJjaWlic2V2ZWgwMWtkd2VsemxnNjU0amplIn0.4_KiKQDyeSB5BroosNCdAA'
         }).addTo(leafletMap);
 
-
         var wrapper = {};
         wrapper.createMapPoint = function (point) {
             return new L.LatLng(point.x, point.y);
@@ -43,7 +42,34 @@ var Leaflet = {
             });
             return marker;
         };
+        wrapper.addButton = function (config) {
+            L.Control[config.name] = L.Control.extend({
+                options: {},
+                onAdd: function (map) {
+                    var controlDiv = L.DomUtil.create('div', 'leaflet-draw-toolbar leaflet-bar');
+                    L.DomEvent
+                        .addListener(controlDiv, 'click', L.DomEvent.stopPropagation)
+                        .addListener(controlDiv, 'click', L.DomEvent.preventDefault)
+                        .addListener(controlDiv, 'click', function () {
+                            config.action(map)
+                        });
+
+                    var controlUI = L.DomUtil.create('a', 'leaflet-draw-edit-remove', controlDiv);
+                    controlUI.title = config.displayTitle;
+                    controlUI.href = '#';
+                    return controlDiv;
+                }
+            });
+
+            var newControl = new L.Control[config.name]();
+            leafletMap.addControl(newControl);
+            return _controlWrapper(newControl);
+        };
         return wrapper;
     }
+};
+
+function _controlWrapper(control) {
+    return {};
 };
 module.exports = Leaflet;
