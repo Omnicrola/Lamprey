@@ -9,6 +9,7 @@ var Stream = function (config) {
     this._headLocation = config.headLocation;
     this.title = config.name;
     this.id = config.id;
+    this._pathLoader = config.pathLoader;
     this.isSelectedForTreatment = false;
 };
 
@@ -26,10 +27,25 @@ Stream.prototype.getHeadLocation = function () {
 }
 
 Stream.prototype.show = function (mapWrapper) {
+    var self = this;
+    if (this._paths === null) {
+        this._pathLoader.load(
+            this.id,
+            mapWrapper,
+            function (paths) {
+                self._paths = paths;
+                _showPaths.call(self, mapWrapper);
+            });
+    } else {
+        _showPaths.call(this, mapWrapper);
+    }
+};
+
+function _showPaths(mapWrapper) {
     this._paths.forEach(function (path) {
         mapWrapper.showLine(path);
     });
-};
+}
 
 Stream.prototype.hide = function (mapWrapper) {
     this._paths.forEach(function (path) {

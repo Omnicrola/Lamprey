@@ -18,6 +18,9 @@ module.exports = {
                         streamLength: dataElement.length,
                         infestationDensity: Math.random() * 100,
                         headLocation: [dataElement.mouth_lat, dataElement.mouth_long],
+                        pathLoader: {
+                            load: _getPath
+                        },
                         paths: null
                     });
                 }));
@@ -30,7 +33,6 @@ module.exports = {
         console.log('requesting...');
         var xmlHttpRequest = new XMLHttpRequest();
         xmlHttpRequest.open('GET', 'JeffsQuandry.json');
-        xmlHttpRequest.on
         xmlHttpRequest.onreadystatechange = function () {
             if (xmlHttpRequest.readyState === XMLHttpRequest.DONE &&
                 xmlHttpRequest.status === 200) {
@@ -42,6 +44,17 @@ module.exports = {
         xmlHttpRequest.send();
     }
 };
+
+function _getPath(streamId, mapWrapper, callback) {
+    Ajax.get('http://10.0.0.45/ajax/getStreamPath.php?id=' + streamId)
+        .success(function (data) {
+            console.log(data);
+            var paths = parsePaths(data.paths, mapWrapper);
+            callback(paths);
+        })
+        .json()
+        .send();
+}
 
 function processData(rawData, mapWrapper) {
     console.log('features: ' + rawData.features.length);

@@ -23,7 +23,6 @@ module.exports = {
 };
 
 function createDisplay(stream) {
-    console.log(stream);
     var title = stream.title;
     var streamId = stream.id;
     var treatmentCost = stream.getTreatmentCost();
