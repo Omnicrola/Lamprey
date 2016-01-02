@@ -14,7 +14,7 @@ var Stream = function (config) {
 };
 
 Stream.prototype.getTreatmentCost = function (costPerUnit) {
-    return this.streamLength * costPerUnit * this.treatmentCostMultiplier;
+    return Math.round(this.streamLength * costPerUnit * this.treatmentCostMultiplier * 100) / 100;
 };
 
 Stream.prototype.applyTreatment = function () {
