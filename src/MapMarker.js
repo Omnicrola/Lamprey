@@ -6,7 +6,7 @@ module.exports = {
         return {
             location: stream.getHeadLocation(),
             popup: {
-                message: createDisplay(stream.title, stream.id, stream.getTreatmentCost()),
+                message: createDisplay(stream),
                 onOpen: stream.show.bind(stream),
                 onClose: stream.hide.bind(stream)
             }
@@ -17,13 +17,20 @@ module.exports = {
         mapElement.addEventListener('click', function (event) {
             var streamId = event.srcElement.attributes['stream-id'];
             console.log(streamId);
+            gameState.toggleStreamTreatment(streamId);
         });
     }
 };
 
-function createDisplay(title, streamId, cost) {
-    return title + '</br>' +
-        '<em>Cost:</em>' + cost + '<br/>' +
-        '<label for="' + streamId + '">Apply Treatment</label>' +
-        '<input type="checkbox" stream-id="' + streamId + '" />';
+function createDisplay(stream) {
+    console.log(stream);
+    var title = stream.title;
+    var streamId = stream.id;
+    var treatmentCost = stream.getTreatmentCost();
+    var severity = stream.infestationDensity;
+    return '<strong>' + title + '</strong></br>' +
+        '<strong>Infestation: </strong>' + severity + '/per sq m<br/>' +
+        '<strong>Cost: </strong>' + treatmentCost + '<br/>' +
+        '<input type="checkbox" stream-id="' + streamId + '" />' +
+        '<label for="' + streamId + '">Apply Treatment</label>';
 }

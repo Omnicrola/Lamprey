@@ -9,9 +9,19 @@ var GameState = function (config) {
     this._streams = [];
     this._observers = [];
 };
+
 GameState.prototype.addStream = function (stream) {
     this._streams.push(stream);
-}
+};
+
+GameState.prototype.toggleStreamTreatment = function (streamId) {
+    this._streams.forEach(function (stream) {
+        if (stream.id == streamId) {
+            stream.isSelectedForTreatment = !stream.isSelectedForTreatment;
+        }
+    });
+};
+
 GameState.prototype.cycleOnce = function () {
     console.log('cycle!');
     console.log('> streams: ' + this._streams.length);

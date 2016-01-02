@@ -1,0 +1,20 @@
+Object Modeling
+-------------------
+A Stream
+	- Has unique ID
+	- Belongs to a Lake
+	- Remembers when last treated
+	- Has a length
+	- Larval count per square meter
+	- When treated
+		-- Kill 98% - 99%
+		-- 33% of remaining move to nearest lake
+		
+A Lake
+	- Has an ID
+	- Has count of lamprey
+	- Has count of fish
+	
+A Player
+	- has a budget
+	- chooses the Streams they want to Treat

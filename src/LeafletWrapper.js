@@ -55,8 +55,8 @@ var Leaflet = {
                         });
 
                     var controlUI = L.DomUtil.create('a', 'leaflet-draw-edit-remove', controlDiv);
-                    controlUI.title = config.displayTitle;
                     controlUI.href = '#';
+                    controlUI.text = config.displayTitle;
                     return controlDiv;
                 }
             });
