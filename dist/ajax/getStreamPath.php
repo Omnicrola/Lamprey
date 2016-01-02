@@ -1,6 +1,7 @@
 <?php
 	if(isset($_GET['id']) && $_GET['id'] != '')
 	{
+		header("Access-Control-Allow-Origin: *");
 		$key = $_GET['id'];
 
 		require "../predis/autoload.php";

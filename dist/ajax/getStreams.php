@@ -1,4 +1,5 @@
 <?php
+	header("Access-Control-Allow-Origin: *");
 	require '../db.php';
 
 	$sql = "SELECT * FROM stream";
